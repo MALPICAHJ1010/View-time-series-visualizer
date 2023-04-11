@@ -41,10 +41,10 @@ def draw_bar_plot():
     df_bar=df_bar.reset_index()
     df_bar=df_bar.fillna(0) 
     # Draw bar plot
-    fig,axes = plt.subplots(1,1)
+    fig,axes = plt.subplots()
     sns.barplot(df_bar, x='Years', y='m_views',hue='Months', palette='bright',orient='v')
-    axes[0].set_xlabel('Year')
-    axes[0].set_ylabel('Mean Page Views')
+    axes.set_xlabel('Year')
+    axes.set_ylabel('Mean Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
@@ -59,7 +59,7 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
-    fig,axes = plt.subplots()
+    fig,axes = plt.subplots(1,2)
     #df_box1=pd.DataFrame(df_box.groupby(['year'],sort=False)['value'].mean().round().astype(int))
     sns.boxplot(df_box, x='year', y='value', palette='bright')
     axes[0].set_xlabel('Years')
