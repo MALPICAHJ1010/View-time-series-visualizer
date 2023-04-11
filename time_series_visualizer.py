@@ -17,10 +17,11 @@ df = df[(df['value']>=(df['value'].quantile(0.025)))&
 def draw_line_plot():
     # Draw line plot
     fig, ax = plt.subplots()
+    sns.lineplot(df, legend=False)
     ax.set_title('Daily freeCodeCamp Forum Page Views 5/2016-12/2019')
     ax.set_xlabel('Date')
     ax.set_ylabel('Page Views')
-    sns.lineplot(df, legend=False)
+  
 
     # Save image and return fig (don't change this part)
     fig.savefig('line_plot.png')
@@ -32,7 +33,7 @@ def draw_bar_plot():
     df_bar = df.copy()
 
     df_bar['Years'] = [d.year for d in df_bar.index.date]
-    df_bar['Months'] = [d.strftime('%b') for d in df_bar.index.date.sort()]
+    df_bar['Months'] = [d.strftime('%b') for d in df_bar.index.date]
     #df_bar['Years'] = pd.to_datetime(df_bar['Years'], format='%Y')
 
     df_bar=pd.DataFrame(df_bar.groupby(['Years','Months'],sort=False)['value'].mean().round().astype(int))
@@ -40,12 +41,10 @@ def draw_bar_plot():
     df_bar=df_bar.reset_index()
     df_bar=df_bar.fillna(0) 
     # Draw bar plot
-
-    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    fig,ax = plt.subplots()
-    sns.barplot(df_bar, x='Years', y='m_views',hue='Months', palette='bright', order=month_order)
-    ax.set_xlabel('Year')
-    ax.set_ylabel('Mean Page Views')
+    fig,axes = plt.subplots(1,1)
+    sns.barplot(df_bar, x='Years', y='m_views',hue='Months', palette='bright',orient='v')
+    axes[0].set_xlabel('Year')
+    axes[0].set_ylabel('Mean Page Views')
 
     # Save image and return fig (don't change this part)
     fig.savefig('bar_plot.png')
@@ -60,20 +59,20 @@ def draw_box_plot():
     df_box['month'] = [d.strftime('%b') for d in df_box.date]
 
     # Draw box plots (using Seaborn)
-    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
-    fig,ax = plt.subplots(1,2)
+    fig,axes = plt.subplots()
     #df_box1=pd.DataFrame(df_box.groupby(['year'],sort=False)['value'].mean().round().astype(int))
-    ax[0].sns.boxplot(df_box, x='year', y='value', palette='bright')
-    ax[0].set_xlabel('Years')
-    ax[0].set_ylabel('Views')
-    ax[0].set_title('Year-wise boxplot (trend)')
+    sns.boxplot(df_box, x='year', y='value', palette='bright')
+    axes[0].set_xlabel('Years')
+    axes[0].set_ylabel('Views')
+    axes[0].set_title('Year-wise boxplot (trend)')
 
     
     #df_box2=pd.DataFrame(df_box.groupby(['month'],sort=False)['value'].mean().round().astype(int))
-    ax[1].sns.boxplot(df_box, x='month', y='value', palette='bright', order=month_order, )
-    ax[1].set_xlabel('Months')
-    ax[1].set_ylabel('Views')
-    ax[1].set_title('Month-wise boxplot (trend)')
+    month_order = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    sns.boxplot(df_box, x='month', y='value', palette='bright', order=month_order, ax=axes[1])
+    axes[1].set_xlabel('Months')
+    axes[1].set_ylabel('Views')
+    axes[1].set_title('Month-wise boxplot (trend)')
 
     # Save image and return fig (don't change this part)
     fig.savefig('box_plot.png')
